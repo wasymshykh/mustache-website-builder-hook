@@ -9,5 +9,18 @@
     
     <h1>Hello {{company.name}}</h1>
 
+    <h1>{{company.name}}</h1>
+    <address>{{company.street}}</address>
+
+    {{#company.category}}
+    <h2>{{name}}</h2>
+    <p>{{description}}</p>
+
+        {{#faq}}
+            <h2>{{question}}</h2>
+            <p>{{answer}}</p>
+        {{/faq}}
+    {{/company.category}}
+
 </body>
 </html>
