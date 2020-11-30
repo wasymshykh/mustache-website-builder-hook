@@ -50,14 +50,19 @@ foreach ($directories as $directory => $files) {
     foreach ($files as $file) {
         
         $data_to_pass = $data;
+        $create_output = true;
         if ($directory !== '/') {
             $directory = str_replace('/', '', $directory);
             if (array_key_exists($directory, $data->company->category[0])) {                
                 $data_to_pass = [$directory => $data->company->category[0]->$directory];
+            } else {
+                $create_output = false;
             }
         }
 
-        build_html_file($directory, $file, $data_to_pass, $mustache_engine);
+        if ($create_output) {
+            build_html_file($directory, $file, $data_to_pass, $mustache_engine);
+        }
     }
 }
 
