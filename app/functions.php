@@ -1,6 +1,5 @@
 <?php
 
-
 function request_body ()
 {
     return json_decode(file_get_contents("php://input"));
@@ -61,7 +60,6 @@ function get_template_files (string $directory)
     return $files;
 }
 
-
 function build_html_file($directory, $file, $data, $mustache)
 {
     $file_name = $file;
@@ -71,10 +69,22 @@ function build_html_file($directory, $file, $data, $mustache)
     
     $html_content = $mustache->loadTemplate(str_replace ('.html', '', $file_name))->render($data);
 
-    $output_directory = DIR . '/output/' . $directory;
+    $output_directory = OUTPUT_DIR . $directory;
     if (!is_dir($output_directory)) {
         mkdir($output_directory);
     }
-    file_put_contents(DIR . '/output/' . $file_name, $html_content);
+    file_put_contents(OUTPUT_DIR . $file_name, $html_content);
 }
 
+function clean_directory($directory)
+{
+    if (is_file($directory)) {
+        return unlink($directory);
+    } else if (is_dir($directory)) {
+        $scan = glob(rtrim($directory,'/').'/*');
+        foreach($scan as $index => $path) {
+            clean_directory($path);
+        }
+        return @rmdir($directory);
+    }
+}
