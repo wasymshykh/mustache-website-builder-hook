@@ -1,4 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>Title for {{company.category.name}} | Template 1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="">
+<script src=""></script>
+	<body>
 
-{{#category}}
-    <h1>{{name}}</h1>
-{{/category}}
+		<div>
+		 <h1>{{company.category.name}} of {{company.name}}</h1>
+		 <p>{{company.category.description}} and {{company.phone}}</p>
+
+		{{#company.category.faq}}
+		  <h2>{{question}}</h2>
+		  <p>{{answer}}</p>
+		{{/company.category.faq}}
+
+		<p>These are the sub categories:</p>
+
+		{{#company.category.category}}
+		  <h2>{{name}}</h2>
+		{{/company.category.category}}
+
+		<p>This category is served by:</p>
+
+		{{#company.category.employee}}
+		  <h2>{{name}}</h2>
+		{{/company.category.employee}}
+
+		</div>
+
+	</body>
+</html>

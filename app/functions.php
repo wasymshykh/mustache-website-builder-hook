@@ -27,53 +27,62 @@ function validated_template ($company)
     return ['status' => true, 'name' => $template_name, 'path' => $template_path];
 }
 
-function get_template_files (string $directory)
+function get_template_sub_directories (string $directory)
 {
     $directories = ['/'];
-    $files = [];
+    $dirs = [];
     $ignore = ['.', '..'];
 
     while (!empty($directories)) {
         $_dir = array_pop($directories);
-        $file_names = scandir($directory . $_dir);        
+        $file_names = scandir($directory . $_dir);
         
         foreach ($file_names as $file_name) {
             if (!in_array($file_name, $ignore)) {
                 $file_path = $directory . $_dir  . $file_name;
-                
                 // check if file is an actual directory
                 if (filetype($file_path) === 'dir') {
                     array_push($directories, $_dir . $file_name . '/');
-                }
-                else if (pathinfo($file_path)['extension'] === 'html') {
-                    // if file has .html extention
-                    if (array_key_exists($_dir, $files)) {
-                        array_push($files[$_dir], $file_name);
-                    } else {
-                        $files[$_dir] = [ $file_name ];
-                    }
+                    array_push($dirs, $file_name);
                 }
             }
         }
     }
     
-    return $files;
+    return $dirs;
 }
 
-function build_html_file($directory, $file, $data, $mustache)
+function build_html_output($file_name, $template_file, $data, $mustache)
 {
-    $file_name = $file;
-    if ($directory !== '/') {
-        $file_name = $directory . '/' . $file;
-    }
-    
-    $html_content = $mustache->loadTemplate(str_replace ('.html', '', $file_name))->render($data);
 
-    $output_directory = OUTPUT_DIR . $directory;
+    $html_content = $mustache->loadTemplate(str_replace ('.html', '', $template_file))->render($data);
+
+    $output_directory = OUTPUT_DIR;
     if (!is_dir($output_directory)) {
         mkdir($output_directory);
     }
     file_put_contents(OUTPUT_DIR . $file_name, $html_content);
+}
+
+function get_template_root_files (string $directory)
+{
+    $ignore = ['.', '..'];
+
+    $files = [];
+
+    $file_names = scandir($directory . '/');
+    
+    foreach ($file_names as $file_name) {
+        if (!in_array($file_name, $ignore)) {
+            $file_path = $directory . '/'  . $file_name;
+            if (filetype($file_path) !== 'dir' && pathinfo($file_path)['extension'] === 'html') {
+                // if file has .html extention
+                array_push($files, $file_name);
+            }
+        }
+    }
+    
+    return $files;
 }
 
 function clean_directory($directory)

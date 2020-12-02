@@ -43,27 +43,47 @@ if (!is_dir(OUTPUT_DIR)) {
     clean_directory(OUTPUT_DIR);
 }
 
-// check for files with r.s.t data
-$directories = get_template_files($template['path']);
+$directories = get_template_sub_directories($template['path']);
 
-foreach ($directories as $directory => $files) {
-    foreach ($files as $file) {
-        
-        $data_to_pass = $data;
-        $create_output = true;
-        if ($directory !== '/') {
-            $directory = str_replace('/', '', $directory);
-            if (array_key_exists($directory, $data->company->category[0])) {                
-                $data_to_pass = [$directory => $data->company->category[0]->$directory];
-            } else {
-                $create_output = false;
+$_data = get_object_vars($data->company);
+
+$interesting = [];
+foreach ($_data as $sub_node => $sub_node_value) {
+    if (is_array($sub_node_value)) {
+        foreach ($sub_node_value as $sub_node_value_array) {
+            if (is_object($sub_node_value_array)) {
+                if (in_array($sub_node, $directories)) {
+                    array_push($interesting, [$sub_node, $sub_node_value_array]);
+                    $unfold = get_object_vars($sub_node_value_array);
+                    if (is_array($unfold)) {
+                        foreach ($unfold as $unfold_key => $unfold_value) {
+                            if (in_array($unfold_key, $directories)) {
+                                if (is_array($unfold_value)) {
+                                    foreach ($unfold_value as $unfold_value_array) {
+                                        if (is_object($unfold_value_array)) {
+                                            array_push($interesting, [$unfold_key, $unfold_value_array]);
+                                        }
+                                    }
+                                } else {
+                                    array_push($interesting, [$unfold_key, $unfold_value]);
+                                }
+                            }
+                        }
+                    }
+                }
             }
-        }
-
-        if ($create_output) {
-            build_html_file($directory, $file, $data_to_pass, $mustache_engine);
         }
     }
 }
 
-end_response(200, "All set!");
+foreach ($interesting as $interesting_value) {
+    $file_name = strtolower(str_replace(' ', '-', $interesting_value[1]->name)) .'.html';
+    $data_to_pass = clone $data;
+    $data_to_pass->company = (object) array_merge((array)$data_to_pass->company, array($interesting_value[0] => $interesting_value[1]));
+    build_html_output($file_name, $interesting_value[0].'/'.$interesting_value[0], ['company' => $data_to_pass->company, $interesting_value[0] => $interesting_value[1]], $mustache_engine);
+}
+
+$files = get_template_root_files($template['path']);
+foreach ($files as $file) {
+    build_html_output($file, $file, ['company' => $data->company], $mustache_engine);
+}
