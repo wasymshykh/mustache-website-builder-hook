@@ -36,7 +36,7 @@ function get_template_sub_directories (string $directory)
     while (!empty($directories)) {
         $_dir = array_pop($directories);
         $file_names = scandir($directory . $_dir);
-        
+
         foreach ($file_names as $file_name) {
             if (!in_array($file_name, $ignore)) {
                 $file_path = $directory . $_dir  . $file_name;
@@ -48,7 +48,7 @@ function get_template_sub_directories (string $directory)
             }
         }
     }
-    
+
     return $dirs;
 }
 
@@ -71,7 +71,7 @@ function get_template_root_files (string $directory)
     $files = [];
 
     $file_names = scandir($directory . '/');
-    
+
     foreach ($file_names as $file_name) {
         if (!in_array($file_name, $ignore)) {
             $file_path = $directory . '/'  . $file_name;
@@ -81,7 +81,7 @@ function get_template_root_files (string $directory)
             }
         }
     }
-    
+
     return $files;
 }
 
