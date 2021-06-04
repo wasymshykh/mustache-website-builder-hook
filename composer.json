@@ -1,6 +1,5 @@
 {
     "require": {
-        "mustache/mustache": "^2.13",
         "salesforce/handlebars-php": "^2.3"
     }
 }

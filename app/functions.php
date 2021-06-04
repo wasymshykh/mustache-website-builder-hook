@@ -57,18 +57,6 @@ function get_template_sub_directories (string $directory)
     return $dirs;
 }
 
-function build_html_output($file_name, $template_file, $data, $mustache)
-{
-
-    $html_content = $mustache->loadTemplate(str_replace ('.html', '', $template_file))->render($data);
-
-    $output_directory = OUTPUT_DIR;
-    if (!is_dir($output_directory)) {
-        mkdir($output_directory);
-    }
-    file_put_contents(OUTPUT_DIR . $file_name, $html_content);
-}
-
 function build_html_handlebars ($file_name, $template_file, $model, $handlebars)
 {
     $html_content = $handlebars->render(str_replace ('.html', '', $template_file), $model);
