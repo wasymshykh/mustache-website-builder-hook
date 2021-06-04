@@ -10,7 +10,9 @@
 		<div>
 		 <h1>{{employee.name}}</h1>
 
-		<p>{{employee.position}}</p>
+		 {{#if employee.show_title}}
+			<p>{{employee.title}}</p>
+		{{/if}}
 
 		</div>
 

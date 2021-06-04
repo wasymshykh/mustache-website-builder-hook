@@ -7,15 +7,38 @@
 <script src=""></script>
 	<body>
 
+		{{> contact_form.comp}}
+
+
 		<div>
 		 <h1>Lawyer in {{#company.address}}{{city}}{{/company.address}}</h1>
 		 <p>This is the website of {{company.name}}</p>
 		 <p>These are all the categories this lawyer serves:</p>
 
 		 <ul>
-		{{#company.category}}
-		  <li>{{name}}</li>
-		{{/company.category}}
+			{{#each company.category}}
+			<li>Category <b>{{name}}</b><br>
+				<ul style="padding-bottom: 8px; font-style: italic">
+					Employees:
+					{{#each employee}}
+					<li>{{name}}</li>
+					{{/each}}
+				</ul>
+
+				<ul>
+					Sub category:
+					{{#each category}}
+					<li>--{{name}}</li>
+						<ul>
+							Employees:
+							{{#each employee}}
+							<li>{{name}}</li>
+							{{/each}}
+						</ul>
+					{{/each}}
+				</ul>
+			</li>
+			{{/each}}
 		 </ul>
 
 		</div>

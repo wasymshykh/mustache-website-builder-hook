@@ -20,18 +20,23 @@ function validated_template ($company)
 
     $template_name = $company->template;
     $template_path =  DIR . '/templates/'.$template_name;
+    $components_path =  $template_path.'/_components';
     if (!file_exists($template_path)) {
         return ['status' => false, 'message' => 'template does not exists'];
     }
+    
+    if (!file_exists($components_path)) {
+        return ['status' => false, 'message' => '_components directory does not exists'];
+    }
 
-    return ['status' => true, 'name' => $template_name, 'path' => $template_path];
+    return ['status' => true, 'name' => $template_name, 'path' => $template_path, 'components' => $components_path];
 }
 
 function get_template_sub_directories (string $directory)
 {
     $directories = ['/'];
     $dirs = [];
-    $ignore = ['.', '..'];
+    $ignore = ['.', '..', '_components'];
 
     while (!empty($directories)) {
         $_dir = array_pop($directories);
@@ -57,6 +62,16 @@ function build_html_output($file_name, $template_file, $data, $mustache)
 
     $html_content = $mustache->loadTemplate(str_replace ('.html', '', $template_file))->render($data);
 
+    $output_directory = OUTPUT_DIR;
+    if (!is_dir($output_directory)) {
+        mkdir($output_directory);
+    }
+    file_put_contents(OUTPUT_DIR . $file_name, $html_content);
+}
+
+function build_html_handlebars ($file_name, $template_file, $model, $handlebars)
+{
+    $html_content = $handlebars->render(str_replace ('.html', '', $template_file), $model);
     $output_directory = OUTPUT_DIR;
     if (!is_dir($output_directory)) {
         mkdir($output_directory);
