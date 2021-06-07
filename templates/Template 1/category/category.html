@@ -1,34 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <meta charset="UTF-8">
-<title>Title for {{company.category.name}} | Template 1</title>
+<title>Title for {{company.name}} | Template 1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="">
 <script src=""></script>
 	<body>
 
-		{{> contact_form.comp}}
+		<p>Navigation:</p>
+		{{> navigation.comp}}
+
 
 		<div>
-		 <h1>{{company.category.name}} of {{company.name}}</h1>
-		 <p>{{company.category.description}} and {{company.phone}}</p>
+		 <h1>Lawyer in {{#company.location}}{{city}}{{/company.location}}</h1>
+		 <p>This is the website of {{company.name}}</p>
+		 <p>These are all the categories this lawyer serves:</p>
 
-		{{#company.category.faq}}
-		  <h2>{{question}}</h2>
-		  <p>{{answer}}</p>
-		{{/company.category.faq}}
+		 <ul>
+			{{#each company.category}}
+			<li>Category <b>{{name}}</b><br>
+				<ul style="padding-bottom: 8px; font-style: italic">
+					Employees:
+					{{#each employee}}
+					<li>{{name}}</li>
+					{{/each}}
+				</ul>
 
-		<p>These are the sub categories:</p>
-
-		{{#company.category.category}}
-		  <h2>{{name}}</h2>
-		{{/company.category.category}}
-
-		<p>This category is served by:</p>
-
-		{{#company.category.employee}}
-		  <h2>{{name}}</h2>
-		{{/company.category.employee}}
+				<ul>
+					Sub category:
+					{{#each category}}
+					<li>--{{name}}</li>
+						<ul>
+							Employees:
+							{{#each employee}}
+							<li>{{name}}</li>
+							{{/each}}
+						</ul>
+					{{/each}}
+				</ul>
+			</li>
+			{{/each}}
+		 </ul>
 
 		</div>
 

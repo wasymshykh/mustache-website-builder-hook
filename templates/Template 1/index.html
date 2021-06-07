@@ -7,11 +7,12 @@
 <script src=""></script>
 	<body>
 
-		{{> contact_form.comp}}
+		<p>Navigation:</p>
+		{{> navigation.comp}}
 
 
 		<div>
-		 <h1>Lawyer in {{#company.address}}{{city}}{{/company.address}}</h1>
+		 <h1>Lawyer in {{#company.location}}{{city}}{{/company.location}}</h1>
 		 <p>This is the website of {{company.name}}</p>
 		 <p>These are all the categories this lawyer serves:</p>
 

@@ -41,8 +41,6 @@ if (!is_dir(OUTPUT_DIR)) {
     clean_directory(OUTPUT_DIR);
 }
 
-$partials_dir = $template['path']."/_compontent/";
-
 $template_loader = new FilesystemLoader($template['path'], [ 'extension' => 'html' ]);
 $partials_loader = new FilesystemLoader($template['components'], [ 'extension' => 'html' ]);
 
@@ -85,10 +83,7 @@ foreach ($_data as $sub_node => $sub_node_value) {
 
 foreach ($interesting as $interesting_value) {
     $file_name = strtolower(str_replace(' ', '-', $interesting_value[1]->name)) .'.html';
-    $data_to_pass = clone $data;
-    $data_to_pass->company = (object) array_merge((array)$data_to_pass->company, array($interesting_value[0] => $interesting_value[1]));
-
-    build_html_handlebars ($file_name, $interesting_value[0].'/'.$interesting_value[0], ['company' => $data_to_pass->company, $interesting_value[0] => $interesting_value[1]], $handlebars);
+    build_html_handlebars ($file_name, $interesting_value[0].'/'.$interesting_value[0], ['company' => $data->company, $interesting_value[0] => $interesting_value[1]], $handlebars);
 }
 
 $files = get_template_root_files($template['path']);

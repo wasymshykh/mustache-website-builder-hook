@@ -1,0 +1,13 @@
+<ul class="nav navbar-nav">
+  <li class="active"><a href="index.html">Startseite</a></li>
+  <li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Rechtsgebiete </a>
+    <ul class="dropdown-menu">
+		{{#each company.category}}
+			<li><a href="{{slug}}.html" title="{{name}}">{{name}}</a></li>
+		{{/each}}
+    </ul>
+  </li>
+  <li><a href="kanzlei.html">Kanzlei</a></li>
+  <li><a href="kontakt.html">Kontakt</a></li>
+</ul>
