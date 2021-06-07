@@ -2,7 +2,11 @@
 
 function request_body ()
 {
-    return json_decode(file_get_contents("php://input"));
+    $json_encoded_unfiltered = file_get_contents("php://input");
+    if (mb_check_encoding($json_encoded_unfiltered, 'UTF-8')) {
+        $json_encoded_unfiltered = utf8_encode($json_encoded_unfiltered);   
+    }
+    return json_decode($json_encoded_unfiltered);
 }
 
 function end_response ($status_code, $message)

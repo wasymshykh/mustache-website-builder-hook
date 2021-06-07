@@ -2,6 +2,7 @@
 
 use Handlebars\Handlebars;
 use Handlebars\Loader\FilesystemLoader;
+use Cocur\Slugify\Slugify;
 
 define('DIR', __DIR__);
 
@@ -46,7 +47,6 @@ $partials_loader = new FilesystemLoader($template['components'], [ 'extension' =
 
 $handlebars = new Handlebars(['loader' => $template_loader, 'partials_loader' => $partials_loader]);
 
-
 $directories = get_template_sub_directories($template['path']);
 $_data = get_object_vars($data->company);
 
@@ -81,8 +81,14 @@ foreach ($_data as $sub_node => $sub_node_value) {
     }
 }
 
+$slugify = new Slugify();
+
 foreach ($interesting as $interesting_value) {
-    $file_name = strtolower(str_replace(' ', '-', $interesting_value[1]->name)) .'.html';
+    if (property_exists($interesting_value[1], 'slug')) {
+        $file_name = $interesting_value[1]->slug.'.html';
+    } else {
+        $file_name = ($slugify->slugify($interesting_value[1]->name)).'.html';
+    }
     build_html_handlebars ($file_name, $interesting_value[0].'/'.$interesting_value[0], ['company' => $data->company, $interesting_value[0] => $interesting_value[1]], $handlebars);
 }
 

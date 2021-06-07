@@ -1,5 +1,6 @@
 {
     "require": {
-        "salesforce/handlebars-php": "^2.3"
+        "salesforce/handlebars-php": "^2.3",
+        "cocur/slugify": "^4.0"
     }
 }
