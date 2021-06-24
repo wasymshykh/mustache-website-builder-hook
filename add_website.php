@@ -18,7 +18,7 @@ if (!array_key_exists($host_name, $websites)) {
         $referrer = DEFAULT_REFERRER;
     }
 
-    $result = $api->add_website($host_name, OUTPUT_DIR, $referrer);
+    $result = $api->add_website($host_name, SERVER_DOMAIN_DIR, $referrer);
     
     if (!$result['status']) {
         new Logs(json_encode(['time' => date('Y-m-d h:s a'), 'hasError' => true, 'errors' => ['host' => $host_name, 'error' => "Unable to create website"]]), 'system');

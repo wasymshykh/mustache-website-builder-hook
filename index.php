@@ -4,17 +4,8 @@ use Handlebars\Handlebars;
 use Handlebars\Loader\FilesystemLoader;
 use Cocur\Slugify\Slugify;
 
-define('DIR', __DIR__);
-
-// change the default output directory to any location, make sure location path ends with '/'
-    // in case url is not defined in request, it will generate static files in default directory
-$default_output_directory = DIR . "/output/";
-
-// setting for cleaning output directory before generating static files again
-define('CLEAN_OUTPUT_DIRECTORY', false);
-
-require 'vendor/autoload.php';
-require 'app/functions.php';
+require_once 'app/init.php';
+require_once 'vendor/autoload.php';
 
 $data = request_body ();
 
@@ -27,12 +18,11 @@ if (!property_exists($data, 'company')) {
 }
 
 if (property_exists($data->company, 'url')) {
-    $url_host = parse_url($data->company->url)['host'];
-    $default_output_directory = DIR . '/' . $url_host . '/';
+    $host_name = parse_url($data->company->url)['host'];
+    define('OUTPUT_DIR', SERVER_DOMAIN_DIR . '/' . $host_name . '/');
 } else {
     end_response(401, "URL is not sent");
 }
-define('OUTPUT_DIR', $default_output_directory);
 
 $template = validated_template($data->company);
 if (!$template['status']) {
@@ -40,11 +30,35 @@ if (!$template['status']) {
 }
 
 if (!is_dir(OUTPUT_DIR)) {
+
     // as the directory is not available, checking if the domain is added
+    $websites = $api->get_websites_filtered();
+    if (empty($websites)) {
+        new Logs(json_encode(['time' => date('Y-m-d h:s a'), 'hasError' => true, 'errors' => ["Unable reach panel API."]]), 'system');
+        end_response(400, "Unable reach panel API.");
+    }
+
+    if (!array_key_exists($host_name, $websites)) {
+
+        if (array_key_exists('HTTP_REFERER', $_SERVER)) {
+            $referrer = $_SERVER['HTTP_REFERER'];
+        } else {
+            $referrer = DEFAULT_REFERRER;
+        }
     
+        $result = $api->add_website($host_name, SERVER_DOMAIN_DIR, $referrer);
+        
+        if (!$result['status']) {
+            new Logs(json_encode(['time' => date('Y-m-d h:s a'), 'hasError' => true, 'errors' => ['host' => $host_name, 'error' => "Unable to create website"]]), 'system');
+            end_response(401, "Unable to create website");
+        } else {
+            // removing default files
+            clean_directory(OUTPUT_DIR);
+            add_htaccess(OUTPUT_DIR); 
+        }
     
-    mkdir(OUTPUT_DIR);
-    
+    }
+
 } else if (CLEAN_OUTPUT_DIRECTORY) {
     clean_directory(OUTPUT_DIR);
 }

@@ -104,3 +104,12 @@ function clean_directory($directory)
         return @rmdir($directory);
     }
 }
+
+function add_htaccess ($path)
+{
+    $access_file_path = $path.'.htaccess';
+    $f = fopen($access_file_path, "w");
+    $d = "RewriteEngine On\nRewriteCond %{HTTPS} !=on\nRewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]";
+    fwrite($f, $d);
+    fclose($f);
+}

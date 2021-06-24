@@ -6,8 +6,8 @@ define('DIR', dirname(__DIR__).'/');
 define('SERVER_PROTOCOL', "https");
 // A record's ip (website builder server ip)
 define('SERVER_IP', '0.0.0.0');
-// AApanel's port, default is 8000, please change default port for security purpose
-define('SERVER_PORT', "8000");
+// AApanel's port, default is 8888, please change default port for security purpose
+define('SERVER_PORT', "8888");
 // AApanel API key, which can be found in Settings, enable API and whitelist your server IP
 define('API_KEY', "YOUR_API_KEY");
 
@@ -19,8 +19,11 @@ require_once DIR.'classes/logs.class.php';
 define('TIMEZONE', 'Europe/Berlin');
 date_default_timezone_set(TIMEZONE);
 
+// setting for cleaning output directory before generating static files again
+define('CLEAN_OUTPUT_DIRECTORY', false);
+
 // here website builder will place files and domain directory will point to this
-define('OUTPUT_DIR', '/www/wwwroot/yourbuilder.com/public/');
+define('SERVER_DOMAIN_DIR', '/www/wwwroot/yourbuilder.com/public/');
 
 // in case request doesn't contain referrer, this will be placed in aapanel domain note
 define('DEFAULT_REFERRER', 'mydefaultreferrer.com');
