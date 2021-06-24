@@ -1,5 +1,13 @@
 <?php
 
+function normal_text($data)
+{
+    if (gettype($data) !== "array") {
+        return htmlspecialchars(trim($data), ENT_QUOTES, 'UTF-8');
+    }
+    return '';
+}
+
 function request_body ()
 {
     $json_encoded_unfiltered = file_get_contents("php://input");
