@@ -27,7 +27,10 @@ if (!property_exists($data, 'company')) {
 }
 
 if (property_exists($data->company, 'url')) {
-    $default_output_directory = DIR . '/' . parse_url($data->company->url)['host'] . '/';
+    $url_host = parse_url($data->company->url)['host'];
+    $default_output_directory = DIR . '/' . $url_host . '/';
+} else {
+    end_response(401, "URL is not sent");
 }
 define('OUTPUT_DIR', $default_output_directory);
 
@@ -37,7 +40,11 @@ if (!$template['status']) {
 }
 
 if (!is_dir(OUTPUT_DIR)) {
+    // as the directory is not available, checking if the domain is added
+    
+    
     mkdir(OUTPUT_DIR);
+    
 } else if (CLEAN_OUTPUT_DIRECTORY) {
     clean_directory(OUTPUT_DIR);
 }

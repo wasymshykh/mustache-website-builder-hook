@@ -34,11 +34,34 @@
 							Employees:
 							{{#each employee}}
 							<li>{{name}}</li>
+
+							<ul>
+								Experience
+								{{#each cv}}
+									<li>
+										{{title}}<br>&nbsp; &nbsp;
+										{{begin}} - {{end}}<br>&nbsp; &nbsp;
+										{{description}}
+									</li>
+								{{/each}}
+							</ul>
+
 							{{/each}}
 						</ul>
 					{{/each}}
 				</ul>
 			</li>
+			{{/each}}
+		 </ul>
+
+
+		 <ul>
+			<b>Gallery</b>
+			{{#each company.gallery}}
+				<li>
+					{{title}}<br>&nbsp; &nbsp;
+					{{image}}
+				</li>
 			{{/each}}
 		 </ul>
 
