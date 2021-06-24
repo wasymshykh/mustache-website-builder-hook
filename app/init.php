@@ -13,6 +13,11 @@ define('API_KEY', "YOUR_API_KEY");
 
 require_once DIR.'app/functions.php';
 require_once DIR.'classes/api.class.php';
+require_once DIR.'classes/logs.class.php';
+
+// Timezone setting
+define('TIMEZONE', 'Europe/Berlin');
+date_default_timezone_set(TIMEZONE);
 
 // here website builder will place files and domain directory will point to this
 define('OUTPUT_DIR', '/www/wwwroot/yourbuilder.com/public/');

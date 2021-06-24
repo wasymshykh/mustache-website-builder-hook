@@ -3,6 +3,10 @@
 require_once 'app/init.php';
 
 $websites = $api->get_websites_filtered();
+if (empty($websites)) {
+    new Logs(json_encode(['time' => date('Y-m-d h:s a'), 'hasError' => true, 'errors' => ["Unable reach panel API."]]), 'system');
+    end_response(400, "Unable reach panel API.");
+}
 
 $host_name = "anywebsite.com";
 
@@ -17,6 +21,7 @@ if (!array_key_exists($host_name, $websites)) {
     $result = $api->add_website($host_name, OUTPUT_DIR, $referrer);
     
     if (!$result['status']) {
+        new Logs(json_encode(['time' => date('Y-m-d h:s a'), 'hasError' => true, 'errors' => ['host' => $host_name, 'error' => "Unable to create website"]]), 'system');
         end_response(401, "Unable to create website");
     }
 
