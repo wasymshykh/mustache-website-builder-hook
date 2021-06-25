@@ -20,6 +20,9 @@ if (isset($_POST['domain']) && !empty($_POST['domain']) && is_string($_POST['dom
 
             $website = $websites[$host_name];
 
+            $ssl_status = false;
+            if (is_array($website['ssl']) || $website['ssl'] != '-1') { $ssl_status = true; }
+
             // checking for A record
             $dns_records = dns_get_record($website['name'], DNS_A);
             $a_record_exists = false;
@@ -32,9 +35,9 @@ if (isset($_POST['domain']) && !empty($_POST['domain']) && is_string($_POST['dom
             }
 
             if ($a_record_exists) {
-                end_response(200, ['type' => 'success', 'message_type' => 'success', 'message' => 'Domain is available and active']);
+                end_response(200, ['type' => 'success', 'message_type' => 'success', 'message' => 'Domain is available and active', 'ssl' => $ssl_status, 'server_ip' => SERVER_IP, 'temporary_path' => SERVER_OUTPUT_URL, 'host' => $host_name]);
             } else {
-                end_response(400, ['type' => 'error', 'message_type' => 'no_arecord', 'message' => 'Domain A record is not set']);
+                end_response(400, ['type' => 'error', 'message_type' => 'no_arecord', 'message' => 'Domain A record is not set', 'ssl' => $ssl_status, 'server_ip' => SERVER_IP, 'temporary_path' => SERVER_OUTPUT_URL, 'host' => $host_name]);
             }
 
         } else {

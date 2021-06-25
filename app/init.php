@@ -10,6 +10,8 @@ define('SERVER_IP', '0.0.0.0');
 define('SERVER_PORT', "8888");
 // AApanel API key, which can be found in Settings, enable API and whitelist your server IP
 define('API_KEY', "YOUR_API_KEY");
+// This will be sent back via info_api 
+define('SERVER_OUTPUT_URL', SERVER_PROTOCOL.'://'.SERVER_IP.'/website-builder/public/');
 
 require_once DIR.'app/functions.php';
 require_once DIR.'classes/api.class.php';

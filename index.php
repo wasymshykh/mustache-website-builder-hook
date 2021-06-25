@@ -68,6 +68,19 @@ $partials_loader = new FilesystemLoader($template['components'], [ 'extension' =
 
 $handlebars = new Handlebars(['loader' => $template_loader, 'partials_loader' => $partials_loader]);
 
+$handlebars->addHelper("if_even", function($template, $context, $args, $source){
+    if (($context->lastIndex() % 2) == 1) {
+        // odd
+        $template->setStopToken('else');
+        $buffer = $template->render($context); $template->setStopToken(false); $template->discard();
+        return $buffer;
+    } else {
+        // even
+        $template->setStopToken('else'); $template->discard(); $template->setStopToken(false);
+        return $template->render($context);
+    }
+});
+
 $directories = get_template_sub_directories($template['path']);
 $_data = get_object_vars($data->company);
 

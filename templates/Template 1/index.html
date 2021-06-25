@@ -19,6 +19,12 @@
 		 <ul>
 			{{#each company.category}}
 			<li>Category <b>{{name}}</b><br>
+				{{#if_even @index}}
+                    is odd
+                {{else}}
+                    is even
+                {{/if_even}}
+				<br>
 				<ul style="padding-bottom: 8px; font-style: italic">
 					Employees:
 					{{#each employee}}
